@@ -85,11 +85,17 @@ def main():
         context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         context.verify_mode = ssl.CERT_NONE
                 
-        service_instance = connect.SmartConnect(host="10.62.92.50",
-                                                user="root",
-                                                pwd="Testesx123!",
+        service_instance = connect.SmartConnect(host="10.62.92.54",
+                                                #user="administrator@vsphere.local",
+                                                user="management@localos1",
+                                                pwd="nr4bbr2981ff999bcU4$",
+                                                #pwd="Testvxrail123!",
                                                 port=int("443"),
                                                 sslContext=context)
+        if not service_instance:
+            print("Could not connect to the specified host using specified "
+                  "username and password")
+            return -1
 
         atexit.register(connect.Disconnect, service_instance)
 
@@ -106,6 +112,10 @@ def main():
         print ("https://github.com/vmware/pyvmomi-community-samples")
         print ("\n\n")
 
+        update_sql = '''psql -U postgres mysticmanager -c \"update settings set management_user='{0}',  management_password='{1}', cluster_name='{2}' where id='MysticManager';\"'''
+        
+        subprocess.call(update_sql, shell=True)
+        
     except vmodl.MethodFault as error:
         print ("Caught vmodl fault : ") + error.msg
         return -1

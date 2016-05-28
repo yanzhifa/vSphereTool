@@ -33,7 +33,7 @@ def main():
     try:
         service_instance = connect.SmartConnect(host="10.62.92.50",
                                                 user="root",
-                                                pwd="Testesx123!",
+                                                pwd="Testesx123!1",
                                                 port=int("443"),
                                                 sslContext=context)
         if not service_instance:

@@ -5,6 +5,9 @@
 """
 vSphere Python SDK program for listing Datastores in Datastore Cluster
 """
+import os, sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "lib/")))
+
 import ssl
 import atexit
 import requests

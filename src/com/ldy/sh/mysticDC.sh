@@ -69,20 +69,18 @@ generateLiteLogBundle() {
     # All Logs
     doCopy '/var/log/mystic/*' 'logs/mystic'
     doCopy '/var/log/rabbitmq/*' 'logs/rabbitmq'
-    doCopy '/usr/lib/vmware-marvin/marvind/logs/*' 'logs/apache-tomcat'
+    doCopy '/mystic/apache-tomcat/logs/*' 'logs/apache-tomcat'
     doCopy '/var/log/*.log' 'logs'
     doCopy '/var/log/messages*' 'logs'
     doCopy '/var/log/mail*' 'logs'
-    doCopy '/var/log/vmware/marvin/*' 'logs/marvin'
-    doCopy '/var/log/vmware/loudmouth/*' 'logs/loudmouth'
 
 
     # Mystic data
     doCopy '/tmp/mystic/data/*' 'data'
 
     # Mystic configuration files
-    doCopy '/usr/lib/vmware-marvin/marvind/webapps/ROOT/WEB-INF/classes/application.properties' 'conf'
-    doCopy '/usr/lib/vmware-marvin/marvind/webapps/extension/WEB-INF/*.xml' 'conf/apache-tomcat'
+    doCopy '/mystic/apache-tomcat/webapps/ROOT/version' 'conf'
+    doCopy '/mystic/apache-tomcat/webapps/ROOT/WEB-INF/*.xml' 'conf/apache-tomcat'
 
     # System configuration files
     doCopy '/etc/resolv.conf' 'conf/etc'
@@ -110,10 +108,6 @@ bundleFiles()
     cd /tmp/mystic/dc
     targetFile=mystic_manager_data_collection_tmp_$dt'.tar.gz'
     tar -zcvf $targetFile mystic_manager_data_collection_$dt >> $dc_log 2>&1
-
-    if [ ! -d /tmp/diagnostics/ ]; then
-        mkdir -p /tmp/diagnostics/
-    fi
 
     mv $targetFile $1
 

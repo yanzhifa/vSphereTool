@@ -32,7 +32,7 @@ def main():
 
     try:
         service_instance = connect.SmartConnect(host="10.62.81.94",
-                                                user="root",
+                                                user="root1",
                                                 pwd="Password123!",
                                                 port=int("443"),
                                                 sslContext=context)
