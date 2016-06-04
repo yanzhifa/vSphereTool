@@ -150,9 +150,9 @@ main() {
 	echo "Step9: Upgrade ESXi user successfully"
 	removeConfigFile
 	echo "Step10: Remove temporary files successfully"
-	.pscUpdate.sh
+	./pscUpdate.sh
 	echo "Step11: Update PSC information successfully"
-	service vmware-marvin start
+        service vmware-marvin start
 	service runjars start
 	echo "Restore succeeds!"
 }

@@ -77,8 +77,8 @@ def user_oper(content, service_user, service_pwd, mgr_user, mgr_pwd):
     portgroup_view.Destroy()
     portgroup_key = None
     for portgroup in dc_portgroup_view:
-        print("{}\t{}\t".format("Portgroup Name:    ", portgroup.name))
-        print("{}\t{}\t\n".format("Portgroup Key:    ", portgroup.key))
+        print("{}\t{}\t".format("ESXi Host:    ", portgroup.name))
+        print("{}\t{}\t\n".format("ESXi key:    ", portgroup.key))
         if portgroup.name.startswith("Management Network") :
             portgroup_key = portgroup.key
     if not portgroup_key :
@@ -204,10 +204,7 @@ def main():
         """
         manager_user = cp.get("asection", "management_user").split('@')
         manager_pwd = cp.get("asection", "management_pwd")
-        user_oper_result = user_oper(content, cp.get("asection", "service_user"), cp.get("asection", "service_pwd"), manager_user[0], manager_pwd)
-        if user_oper_result == -1:
-            print("{}\t{}\t{}\t".format("Add management user failed:    ", manager_user[0], manager_pwd))
-            return -1
+        user_oper(content, cp.get("asection", "service_user"), cp.get("asection", "service_pwd"), manager_user[0], manager_pwd)
 
         """
         #Step3. Update management role privileges and name

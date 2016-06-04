@@ -14,6 +14,7 @@ import ssl
 from pyVim import connect
 from pyVmomi import vmodl
 from pyVmomi import vim
+from pyVmomi import SoapAdapter, DynamicTypeManagerHelper, ManagedMethodExecutorHelper
 
 
 def main():
@@ -31,9 +32,9 @@ def main():
     context.verify_mode = ssl.CERT_NONE
 
     try:
-        service_instance = connect.SmartConnect(host="10.62.81.94",
-                                                user="root1",
-                                                pwd="Password123!",
+        service_instance = connect.SmartConnect(host="10.62.92.54",
+                                                user="administrator@vsphere.local",
+                                                pwd="Testvxrail123!",
                                                 port=int("443"),
                                                 sslContext=context)
         if not service_instance:
@@ -55,7 +56,9 @@ def main():
 
         for esxi_host in esxi_hosts:
             print("{}\t{}\t\n".format("ESXi Host:    ", esxi_host.name))
-            
+            managed_method_executor = esxi_host.RetrieveManagedMethodExecuter()
+            managed_method_executor_stub = ManagedMethodExecutorHelper.MMESoapStubAdapter(managed_method_executor)
+            break
         
         #objviewAccount = content.viewManager.CreateContainerView(content.rootFolder,
         #                                                  [vim.host.LocalAccountManager],

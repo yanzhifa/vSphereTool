@@ -49,40 +49,40 @@ importVcCert() {
 	chown -R tcserver:pivotal /var/lib/vmware-marvin/trust
 }
 
-editConfigJson() {
+updateConfigJson() {
 	# Change version 3.0.0 to 3.5.0
-	if_exist=`grep '"version":"3.5.0"' $config_json`
-	if [ -z $if_exist ]
+	grep '"version":"3.5.0"' $config_json
+	if [ $? != 0 ]
 	then
-		sed -i 's/"version":"3.5.0"/"version":"3.0.0"/' $config_json
+		sed -i 's/"version":"3.0.0"/"version":"3.5.0"/' $config_json
 	fi
-	
+
 	# Add psc ip address at network attribute
-	if_exist=`grep '"psc":{"ip":"'$1'"}' $config.json`
-	if [ "${if_exist:-0}" == 0 ]
+	grep '"psc":{"ip":"'$1'"}' $config_json
+	if [ $? != 0 ]
 	then
 		sed -i 's/"evorail":{"ip"/"psc":{"ip":"'$1'"},&/' $config_json
 	fi
-	
+
 	# Add psc host name at hostnames attribute
 	domain_name=`dig +short -x $1`
 	name_array=(${domain_name//./ })
-	if_exist=`grep '"psc":"'${names[0]}'"' $config_json`
-	if [ -z $if_exist ]
+	grep '"psc":"'${name_array[0]}'"' $config_json
+	if [ $? != 0 ]
 	then
-		sed -i 's/"evorail":"/"psc":"'${names[0]}'",&/' $config_json
+		sed -i 's/"evorail":"/"psc":"'${name_array[0]}'",&/' $config_json
 	fi
-	
+
 	# Add join vc to global attribute
-	if_exist=`grep '"joinVC":false' $config_json`
-	if [ -z $if_exist ]
+	grep '"joinVC":false' $config_json
+	if [ $? != 0 ]
 	then
 		sed -i 's/"loginsightServer"/"joinVC":false,&/' $config_json
 	fi
-	
+
 	# Add external vc attribute
-	if_exist=`grep 'externalVC' $config_json`
-	if [ -z $if_exist ]
+	grep 'externalVC' $config_json
+	if [ $? != 0 ]
 	then
 		external_vc='"externalVC":{"psc":"","vcenter":"","vcUsername":"","vcPassword":"","datacenterName":"","clusterName":""},'
 		sed -i 's/"vendor"/'$external_vc'&/' $config_json
@@ -95,17 +95,17 @@ main() {
 	saveDB $pscIp
 	saveRuntime $pscIp
 
-	echo " Configure Dvs information"
+	echo "Configure Dvs information"
 	decryptPwd
 	generateConfigFile
 	addDvsValue
 
 	echo " Add psc info to config.json file"
-	editConfigJson
-	
+	updateConfigJson $pscIp
+
 	importVcCert
 	removeConfigFile
-	echo " PSC Update succeeds"
+	echo "Update succeeds"
 }
 
 main
